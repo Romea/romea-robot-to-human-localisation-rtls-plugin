@@ -39,7 +39,7 @@ repositories:
         version: devel
     romea_ros2/algorithms/localisation/romea_robot_to_human_rtls_plugin:
         type: git
-        url: git@gitlab-ssh.irstea.fr:romea_ros2/algorithms/localisation/romea_robot_to_human_rtls_plugin.git
+        url: git@gitlab-ssh.irstea.fr:romea_ros2/algorithms/localisation/romea_robot_to_human_localisation_rtls_plugin.git
         version: devel
 
     third_party/serial:
