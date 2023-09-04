@@ -7,10 +7,6 @@ repositories:
         type: git
         url: git@gitlab-ssh.irstea.fr:romea_core/romea_rtls.git
         version: devel
-    romea_core/romea_rtls_transceiver:
-        type: git
-        url: git@gitlab-ssh.irstea.fr:romea_core/romea_rtls_transceiver.git
-        version: devel
 
     romea_core/romea_filtering:
         type: git
@@ -31,7 +27,10 @@ repositories:
         version: devel
     romea_ros2/interfaces/sensors/romea_gps:
         type: git
-        url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/sensors/romea_gps.git
+        url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/sensors/romea_rtls.git
+    romea_ros2/interfaces/sensors/romea_rtls_transceiver:
+        type: git
+        url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/sensors/romea_rtls_transceiver.git
 
     romea_ros2/algorithms/localisation/romea_localisation_msgs:
         type: git
