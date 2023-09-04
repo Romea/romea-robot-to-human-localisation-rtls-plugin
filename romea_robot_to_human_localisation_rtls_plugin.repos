@@ -25,7 +25,7 @@ repositories:
         type: git
         url: git@gitlab-ssh.irstea.fr:romea_ros2/tools/romea_common.git
         version: devel
-    romea_ros2/interfaces/sensors/romea_gps:
+    romea_ros2/interfaces/sensors/romea_rtls:
         type: git
         url: git@gitlab-ssh.irstea.fr:romea_ros2/interfaces/sensors/romea_rtls.git
         version: devel
