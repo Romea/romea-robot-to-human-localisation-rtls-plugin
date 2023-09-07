@@ -8,7 +8,7 @@
 #include <utility>
 
 // romea
-#include "romea_robot_to_human_localisation_rtls/robot_to_human_rtls_localisation_plugin.hpp"
+#include "romea_robot_to_human_localisation_rtls_plugin/robot_to_human_rtls_localisation_plugin.hpp"
 #include "romea_rtls_transceiver_utils/rtls_transceiver_data_conversions.hpp"
 #include "romea_common_utils/params/algorithm_parameters.hpp"
 #include "romea_common_utils/qos.hpp"
