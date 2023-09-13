@@ -2,11 +2,11 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
 
-  <name>romea_robot_to_human_localisation_rtls</name>
+  <name>romea_robot_to_human_localisation_rtls_plugin</name>
 
   <version>0.0.0</version>
 
-  <description>Package romea_gps_localisation_plugin description</description>
+  <description>Package romea robot to human localisation rtls plugin description</description>
 
   <maintainer email="jean.laneurit@inrae.fr">Jean Laneurit</maintainer>
   <license>Apache License 2.0</license>
