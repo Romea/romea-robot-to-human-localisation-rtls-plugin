@@ -53,8 +53,10 @@ void R2HRTLSLocalisationPlugin::declare_parameters_()
   declare_minimal_range(node_);
   declare_maximal_range(node_);
   declare_initiators_names(node_);
+  declare_initiators_ids(node_);
   declare_initiators_positions(node_);
   declare_responders_names(node_);
+  declare_responders_ids(node_);
   declare_responders_positions(node_);
 }
 
