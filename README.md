@@ -1,73 +1,82 @@
 # 1 Overview #
 
-This package is a gps plugin for vehicle localisation. It takes NMEA data coming from gps in order to provide a position and course angle with respect of a local tangent plane ENU reference frame.
+This package is a RTLS plugin for human leader localisation. It schedules ranging between the robot's rtls transceivers (called initiators) and leadaer's rtls transceiver (called responder). It provides these measurements to the localization filter a rough estimation of leader poisition in using trilateration algorithm base on ranging results.  
 
 # 2 Node #
 
 ### 2.1 Subscribed Topics ###
 
+- For each initiator declared in parameters :
 
-- gps/nmea_sentence : (nmea_msgs::Sentence)
+  - initiators_names[i]/range: (romea_rtls_transceiver_msgs::msg::RangingResult
 
-  This topic is provided by nmea_topic_driver or romea_gps_driver. Only GGA and RMC frames are used to fix position and course angle
-
-- vehicle_controler/odom : (nav_msgs::Odometry)
-
-  This topic is provided by vehicle controllers. It will be used to decuded if vehicle moves in forward or reverse direction
+    This topic is provided by rtls transceiver driver node called initiators_names[i]/driver, it contains ranging result beetween selected initiator and the leader responder
 
 ### 2.2 Published Topics ###
 
-- fix (romea_localisation_msgs::ObservationPositionStamped)
+- leader_position (romea_localisation_msgs::msg::ObservationPosition2DStamped)
 
-    Position and its covariance are deduced from GGA frame and published only if :
-    - Horizontal Dilution of Precision is lower than 5
-    - Number of satellites used to compute fix is than 6
-    - Fix quatity is upper or equal to minimal fix quality define by user
+  Lidar position estimated by trilateration algorithm using ranging results
 
-- course (romea_localisation_msgs::ObservationCourseStamped)
+- range (romea_localisation_msgs::msg::ObservationRangeStamped)
 
-    The course angle and its standard deviation are deduced from RMC frame.
-    It is equal to &#960;/2-track angle when vehicle move in forward direction and 3&#960;/2-track overwise. Course angle is only published if speed over ground is upper than minimal speed define by user.  
+  Ranging results between robot rtls tranceivers (initiators) and leader rtls transceiver (responder)
+
+- For each initiator declared in parameters :
+
+  - initiators_names[i]/request: (romea_rtls_transceiver_msgs::msg::RangingRequest)
+
+      This topic is sended to initiator driver node in order to start ranging with leader responder, if ranging succeeded then range result will be send to the plugin node 
 
 ### 2.3 Parameters ###
 
-- ~minimal_fix_quality (integer, default=4)
+- enable_sheduler (bool, default: true)
 
-  In order to only pusblished fix position when an acceptable accurracy is reached a minimal fix quality must be defined by user according experimentation requierements. Here is the list of useful fix qualities as a reminder :
-    - gps fix :2
-    - dgps fix : 3
-    - rtk fix : 4
-    - float rtk fix : 5
+    Enable ranging scheduling. The scheduler must be actived in live and simulated experiments and disables during replay.
 
-- ~minimal_speed_over_ground_to_use_track_angle (float, default=0.8)
+- ~initiators_ids(vector<int>)
 
-  The track angle is reliable only when the vehicle moves fast enough. A minimal speed over ground must be defined by user in order to computed and published the course angle when this speed is reached by the vehicle.
+    Identifier of each rtls transceivers (called initiators) embedded on the robot
 
-- ~restamping (bool, default: false)
+- ~initiators_names(vector<string>)
 
-    If this parameter is set to true stamp of psotion and course messages is equal to computer current time else this stamp is equal gps nmea message stamp.  This paremeter will be used when gps data are coming from a remote master.
+    Name of each rtls transceivers (called initiators) embedded on the robot, more precisely these names are the ros namespace of their driver nodes
 
+- For each initiator declared previously :
 
-- ~gps/gps_fix_uere( double, default 3.0)
+  - ~initiators_positions.initiators_name[i] (vector<double>)
 
-  User Equivalent Range Error for gps fix quality
+    Position of the antenna of the rtls transceiver embedded on the robot 
 
-- ~gps/dpgs_fix_uere( double, default 3.0)
+- ~responders_ids(vector<int>)
 
-  User Equivalent Range Error for dgps fix quality
+    Identifier of the rtls transceiver (called responder) carried by the leader.  
 
-- ~gps/float_rtk_fix_eure( double, default 3.0)
+- ~responders_names(vector<string>)
 
-  User Equivalent Range Error for float rtk fix quality
+    Name of the rtls transceivers (called responder) carried by the leader
 
-- ~gps/rtk_fix_eure( double, default 3.0)
+- ~responders_positions.responders_names[0] (vector<double>)
 
-  User Equivalent Range Error for rtk fix quality
+    Position of the antenna of the rtls transceiver carried by the leader on the robot 
 
-- ~gps/xyz
+- ~minimal_range (double, default: 0.5)
 
-  Position of GPS receiver antenna in vehicle body reference frame
+    Minimal available distance   
 
-- ~wgs84_anchor ([latitude,longitude,altitude])
+- ~maximal_range (double, default: 20.)
 
-  Origin coordinates of the local tangent plan reference frame. If this parameter is not provided by user, it will be deduced from the first received GGA frame. In order to be user friendly latitude and longitude are defined in degrees.
+    Maximal available distance
+
+- ~range_std (double, default: 0.02)
+
+    Standard deviation on range measurement
+
+- ~poll_rate (int, default: 20)
+
+    Rate at which ranging requests are sent to initiators 
+
+- ~base_footprint_frame_id (double, default: base_footprint)
+
+    Name of robot base footprint
+
