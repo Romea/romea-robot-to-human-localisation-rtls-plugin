@@ -69,6 +69,7 @@ void R2HRTLSLocalisationPlugin::declare_parameters_()
   declare_responders_names(node_);
   declare_responders_ids(node_);
   declare_responders_positions(node_);
+  declare_enable_scheduler(node_);
 }
 
 //-----------------------------------------------------------------------------
@@ -103,16 +104,18 @@ void R2HRTLSLocalisationPlugin::init_diagnostic_publisher_()
 //-----------------------------------------------------------------------------
 void R2HRTLSLocalisationPlugin::init_scheduler_()
 {
-  using namespace std::placeholders;
-  auto cb = std::bind(&R2HRTLSLocalisationPlugin::process_ranging_request_, this, _1, _2, _3);
+  if (get_enable_scheduler(node_)) {
+    using namespace std::placeholders;
+    auto cb = std::bind(&R2HRTLSLocalisationPlugin::process_ranging_request_, this, _1, _2, _3);
 
-  scheduler_ = std::make_unique<Scheduler>(
-    get_poll_rate(node_),
-    get_initiators_names(node_),
-    get_responders_names(node_),
-    cb);
+    scheduler_ = std::make_unique<Scheduler>(
+      get_poll_rate(node_),
+      get_initiators_names(node_),
+      get_responders_names(node_),
+      cb);
 
-  scheduler_->start();
+    scheduler_->start();
+  }
 }
 
 //-----------------------------------------------------------------------------
