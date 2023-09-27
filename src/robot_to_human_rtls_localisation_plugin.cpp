@@ -22,6 +22,7 @@
 #include "romea_robot_to_human_localisation_rtls_plugin/robot_to_human_rtls_localisation_plugin.hpp"
 #include "romea_rtls_transceiver_utils/rtls_transceiver_data_conversions.hpp"
 #include "romea_common_utils/params/algorithm_parameters.hpp"
+#include "romea_common_utils/params/eigen_parameters.hpp"
 #include "romea_common_utils/qos.hpp"
 
 namespace romea
@@ -66,9 +67,9 @@ void R2HRTLSLocalisationPlugin::declare_parameters_()
   declare_initiators_names(node_);
   declare_initiators_ids(node_);
   declare_initiators_positions(node_);
-  declare_responders_names(node_);
-  declare_responders_ids(node_);
-  declare_responders_positions(node_);
+  declare_responder_name(node_);
+  declare_responder_id(node_);
+  declare_responder_position(node_);
   declare_enable_scheduler(node_);
 }
 
@@ -77,7 +78,14 @@ void R2HRTLSLocalisationPlugin::init_communication_hub_()
 {
   using namespace std::placeholders;
   auto cb = std::bind(&R2HRTLSLocalisationPlugin::process_range_, this, _1, _2, _3);
-  rtls_communication_hub_ = std::make_unique<RTLSCommunicationHub>(node_, cb);
+  // rtls_communication_hub_ = std::make_unique<RTLSCommunicationHub>(node_, cb);
+  rtls_communication_hub_ = std::make_unique<RTLSCommunicationHub>(
+    node_,
+    get_initiators_names(node_),
+    get_initiators_ids(node_),
+    std::vector{get_responder_name(node_)},
+    std::vector{get_responder_id(node_)},
+    cb);
 }
 
 //-----------------------------------------------------------------------------
@@ -108,26 +116,41 @@ void R2HRTLSLocalisationPlugin::init_scheduler_()
     using namespace std::placeholders;
     auto cb = std::bind(&R2HRTLSLocalisationPlugin::process_ranging_request_, this, _1, _2, _3);
 
+    // scheduler_ = std::make_unique<Scheduler>(
+    //   get_poll_rate(node_),
+    //   get_initiators_names(node_),
+    //   get_responders_names(node_),
+    //   cb);
+
     scheduler_ = std::make_unique<Scheduler>(
       get_poll_rate(node_),
       get_initiators_names(node_),
-      get_responders_names(node_),
+      std::vector{get_responder_name(node_)},
       cb);
 
     scheduler_->start();
   }
 }
 
+
 //-----------------------------------------------------------------------------
 void R2HRTLSLocalisationPlugin::init_plugin_()
 {
+  // plugin_ = std::make_unique<Plugin>(
+  //   get_range_std(node_),
+  //   get_minimal_range(node_),
+  //   get_maximal_range(node_),
+  //   20,   // rxPowerRejectionThreshold
+  //   get_initiators_positions(node_),
+  //   get_responders_positions(node_));
+
   plugin_ = std::make_unique<Plugin>(
     get_range_std(node_),
     get_minimal_range(node_),
     get_maximal_range(node_),
     20,   // rxPowerRejectionThreshold
     get_initiators_positions(node_),
-    get_responders_positions(node_));
+    VectorOfEigenVector3d{get_responder_position(node_)});
 }
 
 //-----------------------------------------------------------------------------

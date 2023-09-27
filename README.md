@@ -1,6 +1,6 @@
 # 1 Overview #
 
-This package is a RTLS plugin for human leader localisation. It schedules ranging between the robot's rtls transceivers (called initiators) and leadaer's rtls transceiver (called responder). It provides these measurements to the localization filter a rough estimation of leader poisition in using trilateration algorithm base on ranging results.  
+This package is a RTLS plugin for human leader localisation. It schedules ranging between the robot's rtls transceivers (called initiators) and leader's rtls transceiver (called responder). It provides these measurements to the localization filter a rough estimation of leader position in using trilateration algorithm base on ranging results.  
 
 # 2 Node #
 
@@ -48,15 +48,15 @@ This package is a RTLS plugin for human leader localisation. It schedules rangin
 
     Position of the antenna of the rtls transceiver embedded on the robot 
 
-- ~responders_ids(vector<int>)
+- ~responder_id(int)
 
     Identifier of the rtls transceiver (called responder) carried by the leader.  
 
-- ~responders_names(vector<string>)
+- ~responder_name(string)
 
     Name of the rtls transceivers (called responder) carried by the leader
 
-- ~responders_positions.responders_names[0] (vector<double>)
+- ~responder_position(vector<double>)
 
     Position of the antenna of the rtls transceiver carried by the leader on the robot 
 
