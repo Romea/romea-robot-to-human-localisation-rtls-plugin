@@ -1,6 +1,6 @@
 # 1 Overview #
 
-This package is a RTLS plugin for human leader localisation. It schedules ranging between the robot's rtls transceivers (called initiators) and leader's rtls transceiver (called responder). It provides these measurements to the localization filter a rough estimation of leader position in using trilateration algorithm base on ranging results.  
+This package is a RTLS plugin for human leader localisation. It schedules ranging between the robot's rtls transceivers (called initiators) and leader's rtls transceiver (called responder). It provides range observations to the localization filter as well as a rough estimation of leader position in using trilateration algorithm base on ranging results.  
 
 # 2 Node #
 
@@ -8,7 +8,7 @@ This package is a RTLS plugin for human leader localisation. It schedules rangin
 
 - For each initiator declared in parameters :
 
-  - initiators_names[i]/range: (romea_rtls_transceiver_msgs::msg::RangingResult
+  - initiators_names[i]/range: (romea_rtls_transceiver_msgs::msg::RangingResult)
 
     This topic is provided by rtls transceiver driver node called initiators_names[i]/driver, it contains ranging result beetween selected initiator and the leader responder
 
@@ -16,7 +16,7 @@ This package is a RTLS plugin for human leader localisation. It schedules rangin
 
 - leader_position (romea_localisation_msgs::msg::ObservationPosition2DStamped)
 
-  Lidar position estimated by trilateration algorithm using ranging results
+  Leader position estimated by trilateration algorithm using ranging results
 
 - range (romea_localisation_msgs::msg::ObservationRangeStamped)
 
