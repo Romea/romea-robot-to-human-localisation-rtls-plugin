@@ -23,26 +23,28 @@
 // romea
 #include "romea_core_localisation_rtls/R2HLocalisationRTLSPlugin.hpp"
 #include "romea_core_rtls/coordination/RTLSSimpleCoordinatorScheduler.hpp"
-#include "romea_common_utils/conversions/diagnostic_conversions.hpp"
-#include "romea_common_utils/publishers/diagnostic_publisher.hpp"
-#include "romea_common_utils/publishers/stamped_data_publisher.hpp"
 #include "romea_localisation_utils/conversions/observation_range_conversions.hpp"
 #include "romea_localisation_utils/conversions/observation_position_conversions.hpp"
 #include "romea_rtls_utils/rtls_communication_hub.hpp"
 #include "romea_rtls_utils/rtls_parameters.hpp"
+#include "romea_common_utils/conversions/diagnostic_conversions.hpp"
+#include "romea_common_utils/publishers/diagnostic_publisher.hpp"
+#include "romea_common_utils/publishers/stamped_data_publisher.hpp"
 
 // local
 #include "romea_robot_to_human_localisation_rtls_plugin/visibility_control.h"
 
 namespace romea
 {
+namespace ros2
+{
 
 class R2HRTLSLocalisationPlugin
 {
 public:
-  using Plugin = R2HLocalisationRTLSPlugin;
-  using Scheduler = RTLSSimpleCoordinatorScheduler;
-  using RangingResult = RTLSTransceiverRangingResult;
+  using Plugin = core::R2HLocalisationRTLSPlugin;
+  using Scheduler = core::RTLSSimpleCoordinatorScheduler;
+  using RangingResult = core::RTLSTransceiverRangingResult;
 
   using RangeMsg = romea_rtls_transceiver_msgs::msg::Range;
   using PayloadMsg = romea_rtls_transceiver_msgs::msg::Payload;
@@ -80,7 +82,7 @@ protected:
   void process_ranging_request_(
     const size_t & initiatorIndex,
     const size_t & responderIndex,
-    const Duration & timeout);
+    const core::Duration & timeout);
 
   void process_range_(
     const size_t & initiatorIndex,
@@ -94,15 +96,16 @@ protected:
 
   std::unique_ptr<Plugin> plugin_;
   std::unique_ptr<Scheduler> scheduler_;
-  romea::ObservationRange range_observation_;
-  romea::ObservationPosition leader_position_observation_;
+  core::ObservationRange range_observation_;
+  core::ObservationPosition leader_position_observation_;
 
   std::unique_ptr<RTLSCommunicationHub> rtls_communication_hub_;
   rclcpp::Publisher<ObservationRangeStampedMsg>::SharedPtr range_pub_;
-  std::shared_ptr<StampedPublisherBase<ObservationPosition>> leader_position_pub_;
-  std::shared_ptr<StampedPublisherBase<DiagnosticReport>> diagnostic_pub_;
+  std::shared_ptr<StampedPublisherBase<core::ObservationPosition>> leader_position_pub_;
+  std::shared_ptr<StampedPublisherBase<core::DiagnosticReport>> diagnostic_pub_;
 };
 
+}  // namespace ros2
 }  // namespace romea
 
 #endif  // ROMEA_ROBOT_TO_HUMAN_LOCALISATION_RTLS_PLUGIN__ROBOT_TO_HUMAN_RTLS_LOCALISATION_PLUGIN_HPP_

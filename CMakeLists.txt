@@ -57,7 +57,7 @@ ament_target_dependencies(${PROJECT_NAME}
   romea_localisation_utils)
 
 rclcpp_components_register_node(${PROJECT_NAME}
-  PLUGIN "romea::R2HRTLSLocalisationPlugin"
+  PLUGIN "romea::ros2::R2HRTLSLocalisationPlugin"
   EXECUTABLE robot_to_human_rtls_localisation_plugin_node
 )
 install(TARGETS

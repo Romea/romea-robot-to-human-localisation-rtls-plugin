@@ -51,7 +51,7 @@ def launch_setup(context, *args, **kwargs):
     else:
         composable_node = ComposableNode(
                 package="romea_robot_to_human_localisation_rtls_plugin",
-                plugin="romea::romea::R2HRTLSLocalisationPlugin",
+                plugin="romea::ros2::R2HRTLSLocalisationPlugin",
                 name=plugin_name,
                 parameters=[plugin_configuration],
             )

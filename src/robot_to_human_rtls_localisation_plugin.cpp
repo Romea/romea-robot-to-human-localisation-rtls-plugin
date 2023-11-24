@@ -27,6 +27,8 @@
 
 namespace romea
 {
+namespace ros2
+{
 
 //-----------------------------------------------------------------------------
 R2HRTLSLocalisationPlugin::R2HRTLSLocalisationPlugin(const rclcpp::NodeOptions & options)
@@ -99,14 +101,15 @@ void R2HRTLSLocalisationPlugin::init_range_publisher_()
 void R2HRTLSLocalisationPlugin::init_leader_position_publisher_()
 {
   leader_position_pub_ =
-    make_stamped_data_publisher<ObservationPosition, ObservationPosition2DStampedMsg>(
+    make_stamped_data_publisher<core::ObservationPosition, ObservationPosition2DStampedMsg>(
     node_, "leader_position", get_base_footprint_frame_id(node_), sensor_data_qos(), true);
 }
 
 //-----------------------------------------------------------------------------
 void R2HRTLSLocalisationPlugin::init_diagnostic_publisher_()
 {
-  diagnostic_pub_ = make_diagnostic_publisher<DiagnosticReport>(node_, node_->get_name(), 1.0);
+  diagnostic_pub_ =
+    make_diagnostic_publisher<core::DiagnosticReport>(node_, node_->get_name(), 1.0);
 }
 
 //-----------------------------------------------------------------------------
@@ -150,17 +153,17 @@ void R2HRTLSLocalisationPlugin::init_plugin_()
     get_maximal_range(node_),
     20,   // rxPowerRejectionThreshold
     get_initiators_positions(node_),
-    VectorOfEigenVector3d{get_responder_position(node_)});
+    core::VectorOfEigenVector3d{get_responder_position(node_)});
 }
 
 //-----------------------------------------------------------------------------
 void R2HRTLSLocalisationPlugin::process_ranging_request_(
   const size_t & initiator_index,
   const size_t & responder_index,
-  const Duration & timeout)
+  const core::Duration & timeout)
 {
   rtls_communication_hub_->send_ranging_request(
-    initiator_index, responder_index, durationToSecond(timeout));
+    initiator_index, responder_index, core::durationToSecond(timeout));
 
   if (initiator_index == 0 && responder_index == 0) {
     diagnostic_pub_->publish(node_->get_clock()->now(), scheduler_->getReport());
@@ -200,7 +203,9 @@ void R2HRTLSLocalisationPlugin::publish_range_(
   range_pub_->publish(std::move(range_msg));
 }
 
+
+}  // namespace ros2
 }  // namespace romea
 
 #include "rclcpp_components/register_node_macro.hpp"
-RCLCPP_COMPONENTS_REGISTER_NODE(romea::R2HRTLSLocalisationPlugin)
+RCLCPP_COMPONENTS_REGISTER_NODE(romea::ros2::R2HRTLSLocalisationPlugin)
