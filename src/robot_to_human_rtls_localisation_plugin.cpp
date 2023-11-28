@@ -109,7 +109,8 @@ void R2HRTLSLocalisationPlugin::init_leader_position_publisher_()
 void R2HRTLSLocalisationPlugin::init_diagnostic_publisher_()
 {
   diagnostic_pub_ =
-    make_diagnostic_publisher<core::DiagnosticReport>(node_, node_->get_name(), 1.0);
+    make_diagnostic_publisher<core::DiagnosticReport>(
+    node_, node_->get_fully_qualified_name(), 1.0);
 }
 
 //-----------------------------------------------------------------------------
